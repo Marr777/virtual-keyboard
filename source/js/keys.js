@@ -120,7 +120,7 @@ const Keys = [
     ru: 'э', en: '\'', code: 'Quote', ruShift: false, enShift: '"',
   },
   {
-    ru: 'Enter', en: 'Enter', code: 'Enter', isFnKey: true,
+    ru: 'Enter', en: 'Enter', code: 'Enter', isFnKey: true, isEnterKey: true,
   },
   {
     ru: 'Shift', en: 'Shift', code: 'ShiftLeft', isFnKey: true,
@@ -178,39 +178,78 @@ const Keys = [
   },
 ];
 
+// рендер общей разметки
 const renderLayout = () => {
   const section = document.createElement('section');
   const textArea = document.createElement('textarea');
   const keyContainer = document.createElement('div');
   const title = document.createElement('h1');
+  const descriptionOS = document.createElement('p');
+  const descriptionLangSwitch = document.createElement('p');
   title.classList.add('app__title');
   title.textContent = 'Виртуальная клавиатура';
   section.classList.add('app');
   textArea.classList.add('output');
   keyContainer.classList.add('container');
+  descriptionOS.classList.add('app__description');
+  descriptionLangSwitch.classList.add('app__description');
+  descriptionOS.textContent = 'Клавиатура сделана в операционной системе Windows 10';
+  descriptionLangSwitch.textContent = 'Переключение языка = Cntrl + Alt';
   document.body.append(section);
   const mainSection = document.querySelector('.app');
   mainSection.append(title);
   mainSection.append(textArea);
   mainSection.append(keyContainer);
+  mainSection.append(descriptionOS);
+  mainSection.append(descriptionLangSwitch);
 };
 
 renderLayout();
 
+// переменные нужные
 const keyContainer = document.querySelector('.container');
-let lang = 'ru';
+let language = 'ru';
 
-const renderKey = (key) => {
+// рендеринг кнопок
+const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
+  keyBtn.classList.add('key');
+  keyBtn.dataset.code = key.code;
   keyBtn.textContent = key[lang];
   keyBtn.addEventListener('click', () => {
     if (!key.isFnKey) {
       document.querySelector('.output').textContent += key[lang];
     }
+    if (key.isEnterKey) {
+      document.querySelector('.output').textContent += '\n';
+    }
   });
   keyContainer.append(keyBtn);
 };
 
-const renderKeys = () => Keys.forEach((key) => (renderKey(key)));
+const renderKeys = (lan = language) => Keys.forEach((key) => (renderKey(key, lan)));
+
+// переключение языка
+const switchCase = (evt) => {
+  if (evt.ctrlKey && evt.altKey) {
+    keyContainer.innerHTML = '';
+    language === 'ru' ? language = 'en' : language = 'ru';
+    renderKeys(language);
+  }
+};
+
+document.addEventListener('keydown', switchCase);
+
+document.addEventListener('keydown', (evt) => {
+  const currentKey = document.querySelector(`[data-code="${evt.code}"]`);
+  currentKey.classList.add('active');
+  const currentDataKey = Keys.find((key) => key.code === evt.code);
+  if (!currentDataKey.isFnKey) {
+    document.querySelector('.output').textContent += currentDataKey[language];
+  }
+});
 
 renderKeys();
+
+
+

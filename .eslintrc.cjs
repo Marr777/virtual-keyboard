@@ -11,6 +11,8 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-      "arrow-body-style": "off"
+      "arrow-body-style": "off",
+      "allowShortCircuit": true,
+      "allowTernary": true
     },
 }
