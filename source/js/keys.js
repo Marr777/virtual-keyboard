@@ -190,6 +190,7 @@ const renderLayout = () => {
   title.textContent = 'Виртуальная клавиатура';
   section.classList.add('app');
   textArea.classList.add('output');
+  textArea.setAttribute('rows', '5');
   keyContainer.classList.add('container');
   descriptionOS.classList.add('app__description');
   descriptionLangSwitch.classList.add('app__description');
@@ -210,18 +211,29 @@ renderLayout();
 const keyContainer = document.querySelector('.container');
 let language = 'ru';
 
+const onBackSpaceClick = () => {
+    const output = document.querySelector('.output');
+    const text = output.value;
+
+    output.value = text.slice(0, text.length - 1);
+}
+
 // рендеринг кнопок
 const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
   keyBtn.classList.add('key');
+  keyBtn.classList.add(`${key.code}`)
   keyBtn.dataset.code = key.code;
   keyBtn.textContent = key[lang];
   keyBtn.addEventListener('click', () => {
     if (!key.isFnKey) {
-      document.querySelector('.output').textContent += key[lang];
+      document.querySelector('.output').value += key[lang];
     }
     if (key.isEnterKey) {
-      document.querySelector('.output').textContent += '\n';
+      document.querySelector('.output').value += '\n';
+    }
+    if (key.code === 'Backspace') {
+      onBackSpaceClick();
     }
   });
   keyContainer.append(keyBtn);
@@ -240,15 +252,33 @@ const switchCase = (evt) => {
 
 document.addEventListener('keydown', switchCase);
 
-document.addEventListener('keydown', (evt) => {
+const typeButton = (evt) => {
+  evt.preventDefault();
   const currentKey = document.querySelector(`[data-code="${evt.code}"]`);
-  currentKey.classList.add('active');
+  if (currentKey) currentKey.classList.add('active');
   const currentDataKey = Keys.find((key) => key.code === evt.code);
-  if (!currentDataKey.isFnKey) {
-    document.querySelector('.output').textContent += currentDataKey[language];
+  if (currentDataKey) {
+    if (!currentDataKey.isFnKey) {
+      document.querySelector('.output').value += currentDataKey[language];
+    }
+    if (currentDataKey.isEnterKey) {
+      document.querySelector('.output').value += '\n';
+    }
   }
-});
+}
 
+const upButton = (evt) => {
+  const currentKey = document.querySelector(`[data-code="${evt.code}"]`);
+  if (currentKey) currentKey.classList.remove('active');
+}
+
+document.addEventListener('keydown', typeButton);
+document.addEventListener('keyup', upButton);
+document.addEventListener('keydown', (evt) => {
+  if(evt.code === 'Backspace') {
+    onBackSpaceClick();
+  }
+})
 renderKeys();
 
 
