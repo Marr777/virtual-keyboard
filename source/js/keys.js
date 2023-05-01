@@ -253,8 +253,17 @@ const renderKey = (key, lang) => {
   };
   keyBtn.textContent = key[lang];
   keyBtn.addEventListener('click', () => {
+    const output = document.querySelector('.output');
+    output.focus();
     if (!key.isFnKey) {
-      document.querySelector('.output').value += keyBtn.textContent;
+        const beforeSelect = output.value.slice(0, output.selectionStart);
+        const afterSelect = output.value.slice(output.selectionEnd, output.value.length);
+        if (beforeSelect && afterSelect) {
+          output.value = `${beforeSelect}${keyBtn.textContent}${afterSelect}`;
+          output.selectionStart = output.selectionEnd = beforeSelect.length + 1;
+        } else {
+          output.value += keyBtn.textContent;
+        }
     }
     if (key.code === 'Backspace') {
       onBackSpaceClick();
@@ -292,13 +301,17 @@ const typeButton = (evt) => {
   const currentKey = document.querySelector(`[data-code="${evt.code}"]`);
   if (currentKey) currentKey.classList.add('active');
   const currentDataKey = Keys.find((key) => key.code === evt.code);
-  if (currentDataKey) {
-    if (!currentDataKey.isFnKey) {
-      document.querySelector('.output').value += currentKey.textContent;
+  if (currentDataKey && !currentDataKey.isFnKey) {
+    const output = document.querySelector('.output');
+    if (output === document.activeElement) {
+      const beforeSelect = output.value.slice(0, output.selectionStart);
+      const afterSelect = output.value.slice(output.selectionEnd, output.value.length)
+      output.value = `${beforeSelect}${currentKey.textContent}${afterSelect}`;
+      output.selectionStart = output.selectionEnd = beforeSelect.length + 1;
+    } else {
+      output.value += currentKey.textContent;
     }
-    if (currentDataKey.isEnterKey) {
-      document.querySelector('.output').value += '\n';
-    }
+
   }
 }
 
