@@ -216,11 +216,25 @@ let shift = false;
 // бэкспейс
 const onBackSpaceClick = () => {
   const output = document.querySelector('.output');
-  const text = output.value;
-
-  output.value = text.slice(0, text.length - 1);
+  if (output === document.activeElement) {
+    const textBefore = output.value.slice(0, output.selectionEnd);
+    const textAfter = output.value.slice(output.selectionEnd);
+    output.value = textBefore.slice(0, textBefore.length - 1) + textAfter;
+    output.selectionStart = output.selectionEnd = textBefore.length - 1;
+  } else {
+    const text = output.value;
+    output.value = text.slice(0, text.length - 1)
+  }
 }
 
+const onDelBtnClick = () => {
+  const output = document.querySelector('.output');
+  if (output === document.activeElement && output.selectionEnd !== output.value.length - 1) {
+    const textBefore = output.value.slice(0, output.selectionEnd);
+    const textAfter = output.value.slice(output.selectionEnd);
+    output.value = textBefore + textAfter.slice(1);
+  }
+}
 // рендеринг кнопок
 const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
