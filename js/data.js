@@ -24,9 +24,7 @@ const onBackSpaceClick = () => {
 const onDelBtnClick = () => {
   const output = document.querySelector('.output');
   const textBefore = output.value.slice(0, output.selectionEnd);
-  console.log(textBefore);
   const textAfter = output.value.slice(output.selectionEnd);
-  console.log(textAfter);
   output.value = textBefore + textAfter.slice(1);
   if (output === document.activeElement) {
     output.selectionStart = output.selectionEnd = textBefore.length;
@@ -86,7 +84,15 @@ const switchCase = (evt) => {
     language === 'ru' ? language = 'en' : language = 'ru';
     localStorage.setItem('lan', `${language}`)
     renderKeys(language);
-  }
+    if (caps) {
+      document.querySelectorAll('.key').forEach((key) => {
+        if (!key.classList.contains('fnKey')) {
+          key.textContent = key.textContent.toUpperCase();
+          document.querySelector('.CapsLock').classList.add('caps-on');
+        }
+      });
+    }
+  };
 };
 
 // события по кнопкам настоящей клавиатуры
@@ -132,22 +138,34 @@ function getShift() {
     if (key.hasOwnProperty(shifted)) {
       renderKey(key, shifted)
     } else {
-      renderKey(key, language);
+      localStorage.getItem('lan') ? renderKey(key, localStorage.getItem('lan')) : renderKey(key, language);
     }
   });
   const currentKeys = document.querySelectorAll('.key');
   currentKeys.forEach((key) => {
     if (!key.classList.contains('fnKey')) {
-      key.textContent = key.textContent.toUpperCase();
+      caps ? key.textContent = key.textContent.toLowerCase() : key.textContent = key.textContent.toUpperCase();
     }
   });
-  shift = true;
+  if (caps) document.querySelector('.CapsLock').classList.add('caps-on');
 }
 
 function noShift() {
   keyContainer.innerHTML = '';
-  renderKeys(language);
-  shift = false;
+  localStorage.getItem('lan') ? renderKeys(localStorage.getItem('lan')) : renderKeys();
+  const currentKeys = document.querySelectorAll('.key');
+  currentKeys.forEach((key) => {
+    if (!key.classList.contains('fnKey')) {
+      if (!caps) {
+        key.textContent = key.textContent.toLowerCase();
+      } else {
+        key.textContent = key.textContent.toUpperCase();
+      }
+    }
+  });
+  if (caps) {
+    document.querySelector('.CapsLock').classList.add('caps-on');
+  }
 }
 
 function getCaps() {
@@ -172,6 +190,7 @@ function getCaps() {
 }
 
 document.addEventListener('keydown', onCapsClick);
+
 document.addEventListener('keydown', onShiftDownClick);
 
 renderKeys();
