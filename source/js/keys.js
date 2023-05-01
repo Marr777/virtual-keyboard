@@ -159,7 +159,7 @@ const Keys = [
     ru: '.', en: '/', code: 'Slash', ruShift: ',', enShift: '?',
   },
   {
-    ru: '↑', en: '↑', code: 'ArrowUp',
+    ru: '↑', en: '↑', code: 'ArrowUp', isArrow: true, isFnKey: true,
   },
   {
     ru: 'Shift', en: 'Shift', code: 'ShiftRight', isShift: true, isFnKey: true,
@@ -180,13 +180,13 @@ const Keys = [
     ru: 'Alt', en: 'Alt', code: 'AltRight', isFnKey: true,
   },
   {
-    ru: '←', en: '←', code: 'ArrowLeft',
+    ru: '←', en: '←', code: 'ArrowLeft', isArrow: true, isFnKey: true,
   },
   {
-    ru: '↓', en: '↓', code: 'ArrowDown',
+    ru: '↓', en: '↓', code: 'ArrowDown', isArrow: true, isFnKey: true,
   },
   {
-    ru: '→', en: '→', code: 'ArrowRight',
+    ru: '→', en: '→', code: 'ArrowRight', isArrow: true, isFnKey: true,
   },
   {
     ru: 'Ctrl', en: 'Ctrl', code: 'ControlRight', isFnKey: true,
@@ -206,6 +206,7 @@ const renderLayout = () => {
   section.classList.add('app');
   textArea.classList.add('output');
   textArea.setAttribute('rows', '5');
+  textArea.setAttribute('cols', '20');
   keyContainer.classList.add('container');
   descriptionOS.classList.add('app__description');
   descriptionLangSwitch.classList.add('app__description');

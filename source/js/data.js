@@ -41,6 +41,59 @@ const addLetter = (field, btn) => {
     field.value += btn.textContent;
   }
 }
+
+const onArrowClick = (key) => {
+  const output = document.querySelector('.output');
+  output.focus();
+  if (key.code === 'ArrowLeft') {
+    output.selectionStart = output.selectionEnd = output.selectionStart - 1;
+  }
+  if (key.code === 'ArrowRight') {
+    output.selectionStart = output.selectionEnd = output.selectionStart + 1;
+  }
+  if (key.code === 'ArrowUp') {
+    const currentPosition = output.selectionStart;
+
+    let newPosition = currentPosition;
+    while (newPosition > 0 && output.value[newPosition - 1] !== "\n") {
+      newPosition--;
+    }
+
+    if (newPosition !== 0) {
+      const newLinePosition = newPosition - 1;
+      while (newPosition > 0 && output.value[newPosition - 1] === "\n") {
+        newPosition--;
+      }
+      output.selectionStart = output.selectionEnd = newPosition;
+    }
+  }
+  if (key.code === 'ArrowDown') {
+    const currentPosition = output.selectionStart;
+
+    let newPosition = currentPosition;
+    while (newPosition < output.value.length && output.value[newPosition] !== "\n") {
+      newPosition++;
+    }
+    while (newPosition < output.value.length && output.value[newPosition] === "\n") {
+      newPosition++;
+    }
+
+    if (newPosition !== currentPosition) {
+      const newLinePosition = newPosition;
+      while (newPosition < output.value.length && output.value[newPosition] !== "\n") {
+        newPosition++;
+      }
+      output.selectionStart = output.selectionEnd = newLinePosition;
+    }
+  }
+}
+
+const onArrowBtnClick = (evt) => {
+  onArrowClick(evt);
+}
+
+document.addEventListener('keydown', onArrowBtnClick);
+
 // рендеринг кнопок
 const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
@@ -68,6 +121,9 @@ const renderKey = (key, lang) => {
     }
     if (key.isShift) {
       !shift ? getShift() : noShift();
+    }
+    if (key.isArrow) {
+      onArrowClick(key)
     }
   });
   keyContainer.append(keyBtn);
