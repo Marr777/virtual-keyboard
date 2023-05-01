@@ -32,7 +32,8 @@
 }
 
 .Backspace,
-.Enter {
+.Enter,
+.ShiftRight {
   grid-column: -3/-1;
   width: 100%;
 }
@@ -72,10 +73,6 @@
   left: 0;
   right: 0;
   margin: auto;
-}
-
-.ShiftRight {
-  grid-column: -4/-1;
 }
 
 .Space {

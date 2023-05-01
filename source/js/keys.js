@@ -156,7 +156,10 @@ const Keys = [
     ru: 'ю', en: '.', code: 'Period', enShift: '>',
   },
   {
-    ru: '/', en: '/', code: 'Slash', ruShift: ',', enShift: '?',
+    ru: '.', en: '/', code: 'Slash', ruShift: ',', enShift: '?',
+  },
+  {
+    ru: '↑', en: '↑', code: 'ArrowUp',
   },
   {
     ru: 'Shift', en: 'Shift', code: 'ShiftRight', isShift: true, isFnKey: true,
@@ -175,6 +178,15 @@ const Keys = [
   },
   {
     ru: 'Alt', en: 'Alt', code: 'AltRight', isFnKey: true,
+  },
+  {
+    ru: '←', en: '←', code: 'ArrowLeft',
+  },
+  {
+    ru: '↓', en: '↓', code: 'ArrowDown',
+  },
+  {
+    ru: '→', en: '→', code: 'ArrowRight',
   },
   {
     ru: 'Ctrl', en: 'Ctrl', code: 'ControlRight', isFnKey: true,
@@ -242,6 +254,16 @@ const onDelBtnClick = () => {
   }
 }
 
+const addLetter = (field, btn) => {
+  if (field === document.activeElement) {
+    const beforeSelect = field.value.slice(0, field.selectionStart);
+    const afterSelect = field.value.slice(field.selectionEnd, field.value.length)
+    field.value = `${beforeSelect}${btn.textContent}${afterSelect}`;
+    field.selectionStart = field.selectionEnd = beforeSelect.length + 1;
+  } else {
+    field.value += btn.textContent;
+  }
+}
 // рендеринг кнопок
 const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
@@ -256,14 +278,7 @@ const renderKey = (key, lang) => {
     const output = document.querySelector('.output');
     output.focus();
     if (!key.isFnKey) {
-        const beforeSelect = output.value.slice(0, output.selectionStart);
-        const afterSelect = output.value.slice(output.selectionEnd, output.value.length);
-        if (beforeSelect && afterSelect) {
-          output.value = `${beforeSelect}${keyBtn.textContent}${afterSelect}`;
-          output.selectionStart = output.selectionEnd = beforeSelect.length + 1;
-        } else {
-          output.value += keyBtn.textContent;
-        }
+      addLetter(output, keyBtn);
     }
     if (key.code === 'Backspace') {
       onBackSpaceClick();
@@ -303,15 +318,7 @@ const typeButton = (evt) => {
   const currentDataKey = Keys.find((key) => key.code === evt.code);
   if (currentDataKey && !currentDataKey.isFnKey) {
     const output = document.querySelector('.output');
-    if (output === document.activeElement) {
-      const beforeSelect = output.value.slice(0, output.selectionStart);
-      const afterSelect = output.value.slice(output.selectionEnd, output.value.length)
-      output.value = `${beforeSelect}${currentKey.textContent}${afterSelect}`;
-      output.selectionStart = output.selectionEnd = beforeSelect.length + 1;
-    } else {
-      output.value += currentKey.textContent;
-    }
-
+    addLetter(output, currentKey);
   }
 }
 
