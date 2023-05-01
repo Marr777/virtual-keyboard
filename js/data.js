@@ -148,6 +148,7 @@ function getShift() {
     }
   });
   if (caps) document.querySelector('.CapsLock').classList.add('caps-on');
+  shift = true;
 }
 
 function noShift() {
@@ -166,6 +167,7 @@ function noShift() {
   if (caps) {
     document.querySelector('.CapsLock').classList.add('caps-on');
   }
+  shift = false;
 }
 
 function getCaps() {
