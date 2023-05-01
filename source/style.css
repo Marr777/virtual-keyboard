@@ -36,10 +36,41 @@
   width: 100%;
 }
 
-.Tab,
 .CapsLock,
 .ShiftLeft {
   grid-column: 1/3;
+}
+
+.Tab {
+  position: relative;
+}
+
+.Tab::after {
+  content: "Tab";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.Enter {
+  position: relative;
+}
+
+.Enter::after {
+  content: "Enter";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
 }
 
 .ShiftRight {

@@ -42,7 +42,7 @@ const Keys = [
     ru: '←', en: '←', code: 'Backspace', isFnKey: true,
   },
   {
-    ru: 'tab', en: 'tab', code: 'Tab', isFnKey: true,
+    ru: `\t`, en: `\t`, code: 'Tab',
   },
   {
     ru: 'й', en: 'q', code: 'KeyQ',
@@ -84,6 +84,9 @@ const Keys = [
     ru: '\\', en: '\\', code: 'Backslash', ruShift: '/', enShift: '|',
   },
   {
+    ru: 'Del', en: 'Del', code: 'Delete', isFnKey: true,
+  },
+  {
     ru: 'CapsLock', en: 'CapsLock', code: 'CapsLock', isFnKey: true,
   },
   {
@@ -120,7 +123,7 @@ const Keys = [
     ru: 'э', en: '\'', code: 'Quote', enShift: '"',
   },
   {
-    ru: 'Enter', en: 'Enter', code: 'Enter', isFnKey: true, isEnterKey: true,
+    ru: `\n`, en: `\n`, code: 'Enter',
   },
   {
     ru: 'Shift', en: 'Shift', code: 'ShiftLeft', isShift: true, isFnKey: true,
@@ -195,7 +198,7 @@ const renderLayout = () => {
   descriptionOS.classList.add('app__description');
   descriptionLangSwitch.classList.add('app__description');
   descriptionOS.textContent = 'Клавиатура сделана в операционной системе Windows 10';
-  descriptionLangSwitch.textContent = 'Переключение языка = Cntrl + Alt';
+  descriptionLangSwitch.textContent = 'Переключение языка = Ctrl + Alt';
   document.body.append(section);
   const mainSection = document.querySelector('.app');
   mainSection.append(title);
@@ -229,12 +232,16 @@ const onBackSpaceClick = () => {
 
 const onDelBtnClick = () => {
   const output = document.querySelector('.output');
-  if (output === document.activeElement && output.selectionEnd !== output.value.length - 1) {
-    const textBefore = output.value.slice(0, output.selectionEnd);
-    const textAfter = output.value.slice(output.selectionEnd);
-    output.value = textBefore + textAfter.slice(1);
+  const textBefore = output.value.slice(0, output.selectionEnd);
+  console.log(textBefore);
+  const textAfter = output.value.slice(output.selectionEnd);
+  console.log(textAfter);
+  output.value = textBefore + textAfter.slice(1);
+  if (output === document.activeElement) {
+    output.selectionStart = output.selectionEnd = textBefore.length;
   }
 }
+
 // рендеринг кнопок
 const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
@@ -249,11 +256,11 @@ const renderKey = (key, lang) => {
     if (!key.isFnKey) {
       document.querySelector('.output').value += keyBtn.textContent;
     }
-    if (key.isEnterKey) {
-      document.querySelector('.output').value += '\n';
-    }
     if (key.code === 'Backspace') {
       onBackSpaceClick();
+    }
+    if (key.code === 'Delete') {
+      onDelBtnClick();
     }
     if (key.code === 'CapsLock') {
       getCaps();
@@ -265,13 +272,16 @@ const renderKey = (key, lang) => {
   keyContainer.append(keyBtn);
 };
 
-const renderKeys = (lan = language) => Keys.forEach((key) => (renderKey(key, lan)));
+const renderKeys = (lan = language) => {
+  localStorage.getItem('lan') ? Keys.forEach((key) => (renderKey(key, localStorage.getItem('lan')))) : Keys.forEach((key) => (renderKey(key, lan)));
+}
 
 // переключение языка
 const switchCase = (evt) => {
   if (evt.ctrlKey && evt.altKey) {
     keyContainer.innerHTML = '';
     language === 'ru' ? language = 'en' : language = 'ru';
+    localStorage.setItem('lan', `${language}`)
     renderKeys(language);
   }
 };
@@ -365,8 +375,8 @@ function getCaps() {
 document.addEventListener('keydown', onCapsClick);
 document.addEventListener('keydown', onShiftDownClick);
 
-// добавляю события
 renderKeys();
+
 
 document.addEventListener('keydown', switchCase);
 document.addEventListener('keydown', typeButton);
@@ -375,6 +385,11 @@ document.addEventListener('keydown', (evt) => {
   if (evt.code === 'Backspace') {
     onBackSpaceClick();
   }
-})
+});
+document.addEventListener('keydown', (evt) => {
+  if (evt.code === 'Delete') {
+    onDelBtnClick();
+  }
+});
 
 
