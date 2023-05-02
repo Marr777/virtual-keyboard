@@ -17,9 +17,9 @@ const onBackSpaceClick = () => {
     output.selectionStart = output.selectionEnd = textBefore.length - 1;
   } else {
     const text = output.value;
-    output.value = text.slice(0, text.length - 1)
+    output.value = text.slice(0, text.length - 1);
   }
-}
+};
 
 const onDelBtnClick = () => {
   const output = document.querySelector('.output');
@@ -29,18 +29,18 @@ const onDelBtnClick = () => {
   if (output === document.activeElement) {
     output.selectionStart = output.selectionEnd = textBefore.length;
   }
-}
+};
 
 const addLetter = (field, btn) => {
   if (field === document.activeElement) {
     const beforeSelect = field.value.slice(0, field.selectionStart);
-    const afterSelect = field.value.slice(field.selectionEnd, field.value.length)
+    const afterSelect = field.value.slice(field.selectionEnd, field.value.length);
     field.value = `${beforeSelect}${btn.textContent}${afterSelect}`;
     field.selectionStart = field.selectionEnd = beforeSelect.length + 1;
   } else {
     field.value += btn.textContent;
   }
-}
+};
 
 const onArrowClick = (key) => {
   const output = document.querySelector('.output');
@@ -55,13 +55,12 @@ const onArrowClick = (key) => {
     const currentPosition = output.selectionStart;
 
     let newPosition = currentPosition;
-    while (newPosition > 0 && output.value[newPosition - 1] !== "\n") {
+    while (newPosition > 0 && output.value[newPosition - 1] !== '\n') {
       newPosition--;
     }
 
     if (newPosition !== 0) {
-      const newLinePosition = newPosition - 1;
-      while (newPosition > 0 && output.value[newPosition - 1] === "\n") {
+      while (newPosition > 0 && output.value[newPosition - 1] === '\n') {
         newPosition--;
       }
       output.selectionStart = output.selectionEnd = newPosition;
@@ -71,26 +70,26 @@ const onArrowClick = (key) => {
     const currentPosition = output.selectionStart;
 
     let newPosition = currentPosition;
-    while (newPosition < output.value.length && output.value[newPosition] !== "\n") {
+    while (newPosition < output.value.length && output.value[newPosition] !== '\n') {
       newPosition++;
     }
-    while (newPosition < output.value.length && output.value[newPosition] === "\n") {
+    while (newPosition < output.value.length && output.value[newPosition] === '\n') {
       newPosition++;
     }
 
     if (newPosition !== currentPosition) {
       const newLinePosition = newPosition;
-      while (newPosition < output.value.length && output.value[newPosition] !== "\n") {
+      while (newPosition < output.value.length && output.value[newPosition] !== '\n') {
         newPosition++;
       }
       output.selectionStart = output.selectionEnd = newLinePosition;
     }
   }
-}
+};
 
 const onArrowBtnClick = (evt) => {
   onArrowClick(evt);
-}
+};
 
 document.addEventListener('keydown', onArrowBtnClick);
 
@@ -98,11 +97,11 @@ document.addEventListener('keydown', onArrowBtnClick);
 const renderKey = (key, lang) => {
   const keyBtn = document.createElement('button');
   keyBtn.classList.add('key');
-  keyBtn.classList.add(`${key.code}`)
+  keyBtn.classList.add(`${key.code}`);
   keyBtn.dataset.code = key.code;
   if (key.isFnKey) {
     keyBtn.classList.add('fnKey');
-  };
+  }
   keyBtn.textContent = key[lang];
   keyBtn.addEventListener('click', () => {
     const output = document.querySelector('.output');
@@ -123,7 +122,7 @@ const renderKey = (key, lang) => {
       !shift ? getShift() : noShift();
     }
     if (key.isArrow) {
-      onArrowClick(key)
+      onArrowClick(key);
     }
   });
   keyContainer.append(keyBtn);
@@ -131,14 +130,14 @@ const renderKey = (key, lang) => {
 
 const renderKeys = (lan = language) => {
   localStorage.getItem('lan') ? Keys.forEach((key) => (renderKey(key, localStorage.getItem('lan')))) : Keys.forEach((key) => (renderKey(key, lan)));
-}
+};
 
 // переключение языка
 const switchCase = (evt) => {
   if (evt.ctrlKey && evt.altKey) {
     keyContainer.innerHTML = '';
     language === 'ru' ? language = 'en' : language = 'ru';
-    localStorage.setItem('lan', `${language}`)
+    localStorage.setItem('lan', `${language}`);
     renderKeys(language);
     if (caps) {
       document.querySelectorAll('.key').forEach((key) => {
@@ -148,7 +147,7 @@ const switchCase = (evt) => {
         }
       });
     }
-  };
+  }
 };
 
 // события по кнопкам настоящей клавиатуры
@@ -161,38 +160,38 @@ const typeButton = (evt) => {
     const output = document.querySelector('.output');
     addLetter(output, currentKey);
   }
-}
+};
 
 const upButton = (evt) => {
   const currentKey = document.querySelector(`[data-code="${evt.code}"]`);
   if (currentKey) currentKey.classList.remove('active');
-}
+};
 
 const onCapsClick = (evt) => {
   if (evt.code === 'CapsLock') {
     getCaps();
   }
-}
+};
 
 const onShiftUpClick = (evt) => {
   if (evt.key === 'Shift') {
     noShift();
   }
-}
+};
 
 const onShiftDownClick = (evt) => {
   if (evt.shiftKey) {
     getShift();
     document.addEventListener('keyup', onShiftUpClick);
   }
-}
+};
 
 function getShift() {
   const shifted = `${language}Shift`;
   keyContainer.innerHTML = '';
   Keys.forEach((key) => {
     if (key.hasOwnProperty(shifted)) {
-      renderKey(key, shifted)
+      renderKey(key, shifted);
     } else {
       localStorage.getItem('lan') ? renderKey(key, localStorage.getItem('lan')) : renderKey(key, language);
     }
@@ -200,7 +199,9 @@ function getShift() {
   const currentKeys = document.querySelectorAll('.key');
   currentKeys.forEach((key) => {
     if (!key.classList.contains('fnKey')) {
-      caps ? key.textContent = key.textContent.toLowerCase() : key.textContent = key.textContent.toUpperCase();
+      caps
+        ? key.textContent = key.textContent.toLowerCase()
+        : key.textContent = key.textContent.toUpperCase();
     }
   });
   if (caps) document.querySelector('.CapsLock').classList.add('caps-on');
@@ -233,7 +234,7 @@ function getCaps() {
       if (!key.classList.contains('fnKey')) {
         key.textContent = key.textContent.toUpperCase();
       }
-    })
+    });
     document.querySelector('.CapsLock').classList.add('caps-on');
     caps = true;
   } else {
@@ -253,7 +254,6 @@ document.addEventListener('keydown', onShiftDownClick);
 
 renderKeys();
 
-
 document.addEventListener('keydown', switchCase);
 document.addEventListener('keydown', typeButton);
 document.addEventListener('keyup', upButton);
@@ -268,4 +268,3 @@ document.addEventListener('keydown', (evt) => {
     onDelBtnClick();
   }
 });
-

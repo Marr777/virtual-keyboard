@@ -27,7 +27,8 @@
     "build": "gulp build",
     "start": "gulp",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint ."
   },
   "type": "module"
 }

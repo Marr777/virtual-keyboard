@@ -221,4 +221,4 @@ const renderLayout = () => {
   mainSection.append(descriptionLangSwitch);
 };
 
-export {Keys, renderLayout}
+export { Keys, renderLayout };
