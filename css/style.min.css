@@ -9,6 +9,7 @@
   text-align: center;
   font-family: sans-serif;
   font-weight: 400;
+  font-size: 20px;
 }
 .app__description:last-child {
   font-weight: 700;
