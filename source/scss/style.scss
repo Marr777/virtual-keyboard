@@ -1,0 +1,123 @@
+.app__title {
+  margin-top: 20px;
+
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 400;
+}
+
+.app__description {
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+
+  &:last-child {
+    font-weight: 700;
+  }
+}
+
+.output {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  padding: 10px;
+
+  font-size: 25px;
+  line-height: 1.6em;
+
+  border: 1px solid rgba(111, 110, 122, 0.395);
+  border-radius: 5px;
+  background-color: rgba(245, 245, 232, 0.186);
+  box-shadow: 0px 0px 6px 0px #8a8889;
+
+  resize: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 8px;
+}
+
+.key {
+  height: 50px;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 20px;
+  box-shadow: 0 1px 3px 0px rgb(61, 57, 61);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.434);
+  background-color: #ccbec637;
+  transition: border-bottom 0.5s ease, background-color 1s;
+  cursor: pointer;
+}
+
+.Backspace,
+.Enter,
+.ShiftRight {
+  grid-column: -3/-1;
+  width: 100%;
+}
+
+.CapsLock,
+.ShiftLeft {
+  grid-column: 1/3;
+}
+
+.Tab {
+  position: relative;
+
+  &::after {
+    content: "Tab";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+
+.Enter {
+  position: relative;
+
+  &::after {
+    content: "Enter";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+}
+
+.Space {
+  grid-column: 4/11;
+}
+
+.key:active,
+.key.active {
+  background-color: #4c4848b1;
+  border-bottom: none;
+}
+
+.key:hover {
+  background-color: #4c4848b1;
+}
+
+.caps-on {
+  background-color: rgb(243, 188, 193);
+}
